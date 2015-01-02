@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "AFHTTPRequestOperation.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @interface ViewController ()
 {
@@ -24,7 +26,80 @@
     
     self.loadData = [NSMutableData new];
     
+//    NSString *str=[NSString stringWithFormat:@"http://www.weather.com.cn/data/sk/101010100.html"];
+//    NSURL *url = [NSURL URLWithString:[str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
+//    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSString *html = operation.responseString;
+//        NSData* data=[html dataUsingEncoding:NSUTF8StringEncoding];
+//        id dict=[NSJSONSerialization  JSONObjectWithData:data options:0 error:nil];
+//        NSLog(@"获取到的数据为：%@",dict);
+//    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"发生错误！%@",error);
+//    }];
+//    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+//    [queue addOperation:operation];
     
+    
+//    NSString *str=[NSString stringWithFormat:@"http://www.weather.com.cn/data/sk/101010100.html"];
+//    NSURL *url = [NSURL URLWithString:[str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//    AFHTTPRequestOperationManager * opearManager = [AFHTTPRequestOperationManager manager];
+//    opearManager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];//设置相应内容类型
+//    [opearManager GET:str parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSString *html  = operation.responseString;
+//        NSData* data=[html dataUsingEncoding:NSUTF8StringEncoding];
+//        NSDictionary * dict=[NSJSONSerialization  JSONObjectWithData:data options:0 error:nil];
+//        NSLog(@"获取到的数据为：%@",dict);
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"发生错误！%@",error);
+//
+//    }];
+    
+    //    NSString *str=[NSString stringWithFormat:@"http://dict-co.iciba.com/api/dictionary.php"];
+    //
+    //    AFHTTPRequestOperationManager * Manager = [AFHTTPRequestOperationManager manager];
+    //    Manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];//设置相应内容类型
+    //    [Manager GET:str parameters:params1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    //        NSString *html  = operation.responseString;
+    //        NSData* data=[html dataUsingEncoding:NSUTF8StringEncoding];
+    //        NSDictionary * dict=[NSJSONSerialization  JSONObjectWithData:data options:0 error:nil];
+    //        NSLog(@"获取到的数据为：%@",dict);
+    //    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    //        NSLog(@"发生错误！%@",error);
+    //        
+    //    }];
+    
+    NSString * strUrl = @"http://www.weather.com.cn/data/sk/101010100.html";//@"http://dict-co.iciba.com/api/dictionary.php";
+    AFHTTPRequestOperationManager *requestPost = [AFHTTPRequestOperationManager manager];
+    NSDictionary * params1 = @{@"w":@"swift", @"key":@"30CBA9DDD34B16DB669A9B214C941F14",@"type":@"json"};
+    
+//    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+//                            @"swift",@"w",
+//                            @"30CBA9DDD34B16DB669A9B214C941F14",@"key",
+//                            @"json",@"type",
+//                            nil];
+    
+    requestPost.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];//设置相应内容类型
+    
+    
+    [requestPost POST:strUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *html  = operation.responseString;
+        NSData* data=[html dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary * dict=[NSJSONSerialization  JSONObjectWithData:data options:0 error:nil];
+        NSLog(@"获取到的数据为：%@",dict);
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"发生错误！%@",error);
+    }];
+////请求金山词霸API获取单词`swift`的解释
+//http://dict-co.iciba.com/api/dictionary.php?w=swift&key=30CBA9DDD34B16DB669A9B214C941F14&type=json
+    
+    
+    
+
+
 }
 
 - (void)didReceiveMemoryWarning {
