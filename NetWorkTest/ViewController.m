@@ -43,28 +43,27 @@
     
     
     
-    NSString * strUrl = @"http://dict-co.iciba.com/api/dictionary.php";//@"http://dict-co.iciba.com/api/dictionary.php";
-    AFHTTPRequestOperationManager *requestPost = [AFHTTPRequestOperationManager manager];
-    NSDictionary * params1 = @{@"w":@"swift", @"key":@"30CBA9DDD34B16DB669A9B214C941F14",@"type":@"json"};
-    
-//    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-//                            @"swift",@"w",
-//                            @"30CBA9DDD34B16DB669A9B214C941F14",@"key",
-//                            @"json",@"type",
-//                            nil];
-    
-    requestPost.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];//设置相应内容类型
-    //requestPost.responseSerializer = [AFHTTPResponseSerializer serializer]; //很重要，去掉就容易遇到错误，暂时还未了解更加详细的原因
-    
-    [requestPost POST:strUrl parameters:params1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString *html  = operation.responseString;
-        NSData* data=[html dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary * dict=[NSJSONSerialization  JSONObjectWithData:data options:0 error:nil];
-        NSLog(@"获取到的数据为：%@",dict);
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"发生错误！%@",error);
-    }];
+//    NSString * strUrl = @"http://dict-co.iciba.com/api/dictionary.php";//@"http://dict-co.iciba.com/api/dictionary.php";
+//    AFHTTPRequestOperationManager *requestPost = [AFHTTPRequestOperationManager manager];
+//    NSDictionary * params1 = @{@"w":@"swift", @"key":@"30CBA9DDD34B16DB669A9B214C941F14",@"type":@"json"};
+//    
+////    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+////                            @"swift",@"w",
+////                            @"30CBA9DDD34B16DB669A9B214C941F14",@"key",
+////                            @"json",@"type",
+////                            nil];
+//    
+//    requestPost.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];//设置相应内容类型
+//    
+//    [requestPost POST:strUrl parameters:params1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSString *html  = operation.responseString;
+//        NSData* data=[html dataUsingEncoding:NSUTF8StringEncoding];
+//        NSDictionary * dict=[NSJSONSerialization  JSONObjectWithData:data options:0 error:nil];
+//        NSLog(@"获取到的数据为：%@",dict);
+//
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"发生错误！%@",error);
+//    }];
 ////请求金山词霸API获取单词`swift`的解释
 //http://dict-co.iciba.com/api/dictionary.php?w=swift&key=30CBA9DDD34B16DB669A9B214C941F14&type=json
     

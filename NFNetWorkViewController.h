@@ -11,5 +11,7 @@
 @interface NFNetWorkViewController : UIViewController
 - (IBAction)GetWithOutPrama:(id)sender;
 - (IBAction)GetWithPramas:(id)sender;
+- (IBAction)GetITunesList:(id)sender;
+- (IBAction)GetiTunesListWithGet:(id)sender;
 
 @end
