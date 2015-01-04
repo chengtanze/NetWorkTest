@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1459C4331A578C6300D0B1A4 /* NFNetWorkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1459C4321A578C6300D0B1A4 /* NFNetWorkViewController.m */; };
 		14A7F7DD1A565700000746B7 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7F7CB1A565700000746B7 /* AFHTTPRequestOperation.m */; };
 		14A7F7DE1A565700000746B7 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7F7CD1A565700000746B7 /* AFHTTPRequestOperationManager.m */; };
 		14A7F7DF1A565700000746B7 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A7F7CF1A565700000746B7 /* AFHTTPSessionManager.m */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1459C4311A578C6300D0B1A4 /* NFNetWorkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NFNetWorkViewController.h; path = ../NFNetWorkViewController.h; sourceTree = "<group>"; };
+		1459C4321A578C6300D0B1A4 /* NFNetWorkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NFNetWorkViewController.m; path = ../NFNetWorkViewController.m; sourceTree = "<group>"; };
 		14A7F7CA1A565700000746B7 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		14A7F7CB1A565700000746B7 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		14A7F7CC1A565700000746B7 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -138,6 +141,8 @@
 		FCB3B1D21A539CD800567E73 /* NetWorkTest */ = {
 			isa = PBXGroup;
 			children = (
+				1459C4311A578C6300D0B1A4 /* NFNetWorkViewController.h */,
+				1459C4321A578C6300D0B1A4 /* NFNetWorkViewController.m */,
 				FCB3B1D71A539CD800567E73 /* AppDelegate.h */,
 				FCB3B1D81A539CD800567E73 /* AppDelegate.m */,
 				FCB3B1DD1A539CD800567E73 /* ViewController.h */,
@@ -290,6 +295,7 @@
 				14A7F7E41A565700000746B7 /* AFURLResponseSerialization.m in Sources */,
 				14A7F7E51A565700000746B7 /* AFURLSessionManager.m in Sources */,
 				FCB3B1DC1A539CD800567E73 /* NetWorkTest.xcdatamodeld in Sources */,
+				1459C4331A578C6300D0B1A4 /* NFNetWorkViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
