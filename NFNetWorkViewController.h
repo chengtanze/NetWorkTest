@@ -13,5 +13,9 @@
 - (IBAction)GetWithPramas:(id)sender;
 - (IBAction)GetITunesList:(id)sender;
 - (IBAction)GetiTunesListWithGet:(id)sender;
+- (IBAction)DownLoad:(id)sender;
+- (IBAction)UpLoad:(id)sender;
+- (IBAction)PasueDownLoad:(id)sender;
+- (IBAction)ResumDownLoad:(id)sender;
 
 @end

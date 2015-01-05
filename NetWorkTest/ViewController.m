@@ -64,6 +64,7 @@
 //    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 //        NSLog(@"发生错误！%@",error);
 //    }];
+
 ////请求金山词霸API获取单词`swift`的解释
 //http://dict-co.iciba.com/api/dictionary.php?w=swift&key=30CBA9DDD34B16DB669A9B214C941F14&type=json
     
@@ -126,7 +127,9 @@
     NSError * error = [[NSError alloc]init];
     NSDictionary *weatherDic = [NSJSONSerialization JSONObjectWithData:self.loadData options:NSJSONReadingAllowFragments error:&error];
     
-   
+    NSDictionary * weatherInfo = [weatherDic valueForKey:@"weatherinfo"];
+    NSString * city = [weatherInfo valueForKey:@"city"];
+    
 }
 
 @end

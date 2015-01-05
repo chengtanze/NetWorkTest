@@ -11,7 +11,11 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "AFHTTPSessionManager.h"
 @interface NFNetWorkViewController ()
-
+{
+    NSURLSessionDownloadTask *downloadTask;
+    AFURLSessionManager *manager;
+    NSData * resumeDataTmp;
+}
 @end
 
 @implementation NFNetWorkViewController
@@ -140,11 +144,12 @@
 }
 
 - (IBAction)GetiTunesListWithGet:(id)sender {
+    NSString * strFull = @"https://itunes.apple.com/search?country=TW&term=wangfei";
     NSString *str=[NSString stringWithFormat:@"https://itunes.apple.com/search/"];
     NSDictionary * params1 = @{ @"country" :@"TW",@"term" : @"wangfei" };
     AFHTTPRequestOperationManager * Manager = [AFHTTPRequestOperationManager manager];
     Manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];//设置相应内容类型
-    [Manager POST:str parameters:params1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [Manager GET:strFull parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString *html  = operation.responseString;
         NSData* data=[html dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary * dict=[NSJSONSerialization  JSONObjectWithData:data options:0 error:nil];
@@ -172,10 +177,113 @@
                 NSString * trackCensoredNam = [self PraseData:result[index] Key:@"trackCensoredName"];
                 NSString * trackNam = [self PraseData:result[index] Key:@"trackCensoredName"];
                 NSString * previewUrl = [self PraseData:result[index] Key:@"previewUrl"];
-                NSLog(@"歌手名称:%@,\r\n 图片URL:%@:,\r\n 专辑名:%@,\r\n  歌曲名:%@,\r\n  歌曲URL:%@,\r\n", name, pic_100, collectionCensoredName, trackCensoredNam, previewUrl);
+                NSLog(@"歌手名称:%@,\r\n 图片URL:%@,\r\n 专辑名:%@,\r\n  歌曲名:%@,\r\n  歌曲URL:%@,\r\n", name, pic_100, collectionCensoredName, trackCensoredNam, previewUrl);
             }
         
     }];
+}
+//http://a196.phobos.apple.com/us/r2000/009/Music/v4/4d/e7/74/4de7747f-4e7d-03e3-a51d-79fc7ee3b791/mzaf_6317458006875106910.aac.m4a
+
+//http://a2.mzstatic.com/us/r30/Music/8d/5e/b3/mzi.bjvemxnq.100x100-75.jpg
+
+//file:///Users/kong/Library/Developer/CoreSimulator/Devices/2D14F0D3-228D-48EA-B306-858B1426DFD3/data/Containers/Data/Application/9F016010-5D08-4D0D-B6CB-79E577E43FB7/tmp/CFNetworkDownload_4bRFKQ.tmp
+
+//file:///Users/kong/Library/Developer/CoreSimulator/Devices/2D14F0D3-228D-48EA-B306-858B1426DFD3/data/Containers/Data/Application/317B1AF7-5CD9-4DE3-A0B8-B61D7B2D1018/Documents/mzi.bjvemxnq.100x100-75.jpg
+- (IBAction)DownLoad:(id)sender {
+    
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    
+    NSURL *URL = [NSURL URLWithString:@"http://a196.phobos.apple.com/us/r2000/009/Music/v4/4d/e7/74/4de7747f-4e7d-03e3-a51d-79fc7ee3b791/mzaf_6317458006875106910.aac.m4a"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    //将一个NSProgress 指针传入，在设置其KVO就可以监测到下载的进度值
+    NSProgress * progress = nil;
+    downloadTask = [manager downloadTaskWithRequest:request progress:&progress
+    destination:^NSURL *(NSURL *targetPath, NSURLResponse *response)
+    {
+        //获取当前NSDocumentDirectory目录地址
+        NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        
+        return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+    }
+    completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error)
+    {
+        NSLog(@"File downloaded to: %@", filePath);
+    }];
+    
+    [progress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:nil];
+    [downloadTask resume];
+
+}
+
+// 监听到了属性改变会调用这个方法
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"fractionCompleted"]) {
+        //NSLog(@"progress :%@", change);
+        NSString * progress = [change valueForKey:@"new"];
+        NSProgress * p = (NSProgress *)object;
+        NSLog(@"progress :%@, %@", progress, p.localizedDescription);
+    }
+}
+
+//file:///Users/kong/Library/Developer/CoreSimulator/Devices/2D14F0D3-228D-48EA-B306-858B1426DFD3/data/Containers/Data/Application/F551A2D4-B744-41EF-96A2-674B1E8E9B0E/Documents/mzaf_6317458006875106910.aac.m4a
+- (IBAction)PasueDownLoad:(id)sender {
+    
+    // 如果下载任务不存在，直接返回
+    if (downloadTask == nil) return;
+    
+    // 暂停任务(块代码中的resumeData就是当前正在下载的二进制数据)
+    // 停止下载任务时，需要保存数据
+    [downloadTask cancelByProducingResumeData:^(NSData *resumeData) {
+        resumeDataTmp = resumeData;
+        
+        // 清空并且释放当前的下载任务
+        downloadTask = nil;
+    }];
+    
+    //downloadTaskWithResumeData
+}
+
+- (IBAction)ResumDownLoad:(id)sender {
+    if (resumeDataTmp == nil) {
+        return;
+    }
+    
+    //将一个NSProgress 指针传入，在设置其KVO就可以监测到下载的进度值
+    NSProgress * progress = nil;
+    downloadTask = [manager downloadTaskWithResumeData:resumeDataTmp progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        //获取当前NSDocumentDirectory目录地址
+        NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        
+        return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        NSLog(@"File downloaded to: %@", filePath);
+    }];
+    
+    [progress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:nil];
+    [downloadTask resume];
+}
+
+
+- (IBAction)UpLoad:(id)sender {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    
+    NSURL *URL = [NSURL URLWithString:@"http://example.com/upload"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    NSURL *filePath = [NSURL fileURLWithPath:@"file://path/to/image.png"];
+    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithRequest:request fromFile:filePath progress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        if (error) {
+            NSLog(@"Error: %@", error);
+        } else {
+            NSLog(@"Success: %@ %@", response, responseObject);
+        }
+    }];
+    [uploadTask resume];
 }
 
 @end
